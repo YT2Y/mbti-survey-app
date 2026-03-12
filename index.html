@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MBTI都道府県アンケート</title>
+  <link rel="stylesheet" href="css/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body>
+  <header class="header">
+    <h1>MBTI都道府県アンケート</h1>
+    <p class="header-sub">あなたの都道府県とMBTIタイプを教えてください</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="survey">回答する</button>
+    <button class="tab" data-tab="results">結果を見る</button>
+    <button class="tab" data-tab="manage">データ管理</button>
+  </nav>
+
+  <!-- ========== 回答タブ ========== -->
+  <section id="tab-survey" class="tab-content active">
+    <div class="card">
+      <h2>アンケート回答</h2>
+
+      <div class="form-group">
+        <label for="prefecture-select">お住まいの都道府県</label>
+        <select id="prefecture-select">
+          <option value="">-- 選択してください --</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label>あなたのMBTIタイプ</label>
+        <div class="mbti-grid" id="mbti-grid"></div>
+      </div>
+
+      <button id="submit-btn" class="btn-primary" disabled>回答を送信</button>
+      <div id="submit-message" class="message hidden"></div>
+    </div>
+  </section>
+
+  <!-- ========== 結果タブ ========== -->
+  <section id="tab-results" class="tab-content hidden">
+    <div class="card">
+      <h2>都道府県マップ</h2>
+      <div class="map-legend" id="map-legend"></div>
+      <div class="map-container" id="map-container"></div>
+      <div class="tooltip" id="map-tooltip"></div>
+    </div>
+
+    <div class="card">
+      <h2>全体のMBTI分布</h2>
+      <div class="chart-wrapper">
+        <canvas id="chart-overall"></canvas>
+      </div>
+    </div>
+
+    <div class="charts-row">
+      <div class="card">
+        <h2>気質グループ分布</h2>
+        <div class="chart-wrapper chart-small">
+          <canvas id="chart-groups"></canvas>
+        </div>
+      </div>
+      <div class="card">
+        <h2>都道府県別分布</h2>
+        <div class="form-group">
+          <select id="pref-chart-select">
+            <option value="">-- 都道府県を選択 --</option>
+          </select>
+        </div>
+        <div class="chart-wrapper chart-small">
+          <canvas id="chart-prefecture"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>集計テーブル</h2>
+      <div class="table-controls">
+        <label><input type="checkbox" id="show-zero-rows"> 回答0件の都道府県も表示</label>
+      </div>
+      <div class="table-wrapper">
+        <table id="results-table">
+          <thead></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== データ管理タブ ========== -->
+  <section id="tab-manage" class="tab-content hidden">
+    <div class="card">
+      <h2>データ管理</h2>
+      <p id="data-count">総回答数: 0件</p>
+
+      <div class="manage-actions">
+        <button id="btn-sample" class="btn-secondary">サンプルデータ追加（50件）</button>
+        <button id="btn-export" class="btn-secondary">JSONエクスポート</button>
+        <label class="btn-secondary btn-file">
+          JSONインポート
+          <input type="file" id="file-import" accept=".json" hidden>
+        </label>
+        <button id="btn-clear" class="btn-danger">全データ削除</button>
+      </div>
+    </div>
+  </section>
+
+  <script src="js/data.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/charts.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
