@@ -9,12 +9,38 @@ const MBTI_LABELS = {
   ISTP: '巨匠',   ISFP: '冒険家', ESTP: '起業家', ESFP: 'エンターテイナー'
 };
 
+// 16personalities 英語名（画像URL用）
+const MBTI_EN_LABELS = {
+  INTJ: 'architect', INTP: 'logician', ENTJ: 'commander', ENTP: 'debater',
+  INFJ: 'advocate', INFP: 'mediator', ENFJ: 'protagonist', ENFP: 'campaigner',
+  ISTJ: 'logistician', ISFJ: 'defender', ESTJ: 'executive', ESFJ: 'consul',
+  ISTP: 'virtuoso', ISFP: 'adventurer', ESTP: 'entrepreneur', ESFP: 'entertainer'
+};
+
+// 気質グループ別のネオンカラー
+const MBTI_GROUP_NEON = {
+  NT: '#c084fc', // パープルネオン
+  NF: '#34d399', // グリーンネオン
+  SJ: '#60a5fa', // ブルーネオン
+  SP: '#fbbf24'  // イエローネオン
+};
+
+function getMBTIGroup(type) {
+  if (['INTJ','INTP','ENTJ','ENTP'].includes(type)) return 'NT';
+  if (['INFJ','INFP','ENFJ','ENFP'].includes(type)) return 'NF';
+  if (['ISTJ','ISFJ','ESTJ','ESFJ'].includes(type)) return 'SJ';
+  return 'SP';
+}
+
+function getMBTIAvatarUrl(type) {
+  const en = MBTI_EN_LABELS[type];
+  return `https://static.neris-assets.com/images/personality-types/avatars/faces/${type.toLowerCase()}-${en}-s3-v5-male.svg?v=1`;
+}
+
 let selectedMBTI = null;
 let adminAuthenticated = false;
 
-// 管理者パスワードのSHA-256ハッシュ（デフォルト: "mbti2024"）
-const ADMIN_HASH = 'a]b5c9e8f7d6e3c2a1b0d4f8e7c6b5a3d2e1f0c9b8a7d6e5f4c3b2a1d0e9f8';
-
+// 管理者パスワード認証
 async function sha256(message) {
   const msgBuffer = new TextEncoder().encode(message);
   const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
@@ -22,7 +48,6 @@ async function sha256(message) {
   return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
 }
 
-// 初期化時にハッシュを計算して保存
 let ADMIN_PASSWORD_HASH = '';
 (async () => {
   ADMIN_PASSWORD_HASH = await sha256('mbti2024');
@@ -41,21 +66,37 @@ async function checkAdminPassword() {
   return false;
 }
 
+// URLパラメータで管理モードチェック
+function isAdminMode() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('admin') === 'mbti2024';
+}
+
 // ==========================================
 // 初期化
 // ==========================================
 
 document.addEventListener('DOMContentLoaded', async () => {
-  // Firestoreからデータを読み込んでからUI初期化
   await initData();
+  if (isAdminMode()) initAdminTab();
   initTabs();
   initPrefectureSelects();
   initMBTIGrid();
   initFormSubmit();
-  initDataManagement();
+  if (isAdminMode()) initDataManagement();
   loadMap('map-container');
   updateResultsTabState();
 });
+
+// 管理タブを動的に追加
+function initAdminTab() {
+  const nav = document.querySelector('.tabs');
+  const btn = document.createElement('button');
+  btn.className = 'tab';
+  btn.dataset.tab = 'manage';
+  btn.textContent = '管理';
+  nav.appendChild(btn);
+}
 
 // ==========================================
 // タブ切替
@@ -134,29 +175,60 @@ function initPrefectureSelects() {
 }
 
 // ==========================================
-// MBTIグリッド
+// MBTIグリッド（画像 + 気質グループ色分け付き）
 // ==========================================
 
 function initMBTIGrid() {
   const grid = document.getElementById('mbti-grid');
 
-  MBTI_TYPES.forEach(type => {
-    const btn = document.createElement('button');
-    btn.type = 'button';
-    btn.className = 'mbti-btn';
-    btn.dataset.type = type;
-    btn.style.setProperty('--mbti-color', MBTI_COLORS[type]);
-    btn.style.setProperty('--mbti-bg', MBTI_COLORS[type] + '18');
-    btn.innerHTML = `${type}<span class="mbti-label">${MBTI_LABELS[type]}</span>`;
+  const groupLabels = {
+    NT: '分析家', NF: '外交官', SJ: '番人', SP: '探検家'
+  };
+  const groupOrder = ['NT', 'NF', 'SJ', 'SP'];
 
-    btn.addEventListener('click', () => {
-      document.querySelectorAll('.mbti-btn').forEach(b => b.classList.remove('selected'));
-      btn.classList.add('selected');
-      selectedMBTI = type;
-      updateSubmitButton();
+  groupOrder.forEach(group => {
+    // グループヘッダー
+    const header = document.createElement('div');
+    header.className = 'mbti-group-header';
+    header.style.setProperty('--group-color', MBTI_GROUP_NEON[group]);
+    header.textContent = groupLabels[group];
+    grid.appendChild(header);
+
+    // 4タイプ
+    const types = MBTI_TYPES.filter(t => getMBTIGroup(t) === group);
+    types.forEach(type => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'mbti-btn';
+      btn.dataset.type = type;
+      btn.dataset.group = group;
+      const groupColor = MBTI_GROUP_NEON[group];
+      btn.style.setProperty('--mbti-color', groupColor);
+      btn.style.setProperty('--mbti-bg', groupColor + '20');
+      btn.style.setProperty('--mbti-glow', groupColor);
+
+      const img = document.createElement('img');
+      img.src = getMBTIAvatarUrl(type);
+      img.alt = type;
+      img.className = 'mbti-avatar';
+      img.loading = 'lazy';
+      img.onerror = function() { this.style.display = 'none'; };
+
+      btn.appendChild(img);
+      btn.insertAdjacentHTML('beforeend',
+        `<span class="mbti-type-name">${type}</span>` +
+        `<span class="mbti-label">${MBTI_LABELS[type]}</span>`
+      );
+
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.mbti-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        selectedMBTI = type;
+        updateSubmitButton();
+      });
+
+      grid.appendChild(btn);
     });
-
-    grid.appendChild(btn);
   });
 }
 
@@ -235,12 +307,10 @@ function renderResultsTable() {
   const tbody = table.querySelector('tbody');
   const showZero = document.getElementById('show-zero-rows').checked;
 
-  // ヘッダー
   thead.innerHTML = '<tr><th>都道府県</th>'
     + MBTI_TYPES.map(t => `<th>${t}</th>`).join('')
     + '<th>合計</th></tr>';
 
-  // ボディ
   tbody.innerHTML = '';
   PREFECTURES.forEach(pref => {
     const dist = getMBTIDistribution(pref.code);
@@ -257,7 +327,6 @@ function renderResultsTable() {
     tbody.appendChild(tr);
   });
 
-  // 合計行
   const totalDist = getMBTIDistribution(null);
   const grandTotal = Object.values(totalDist).reduce((a, b) => a + b, 0);
   if (grandTotal > 0) {
@@ -269,7 +338,6 @@ function renderResultsTable() {
   }
 }
 
-// チェックボックスイベント
 document.addEventListener('DOMContentLoaded', () => {
   const cb = document.getElementById('show-zero-rows');
   if (cb) cb.addEventListener('change', renderResultsTable);
@@ -280,12 +348,17 @@ document.addEventListener('DOMContentLoaded', () => {
 // ==========================================
 
 function updateDataCount() {
+  const el = document.getElementById('data-count');
+  if (!el) return;
   const count = getAllResponses().length;
-  document.getElementById('data-count').textContent = `総回答数: ${count}件`;
+  el.textContent = `総回答数: ${count}件`;
 }
 
 function initDataManagement() {
-  document.getElementById('btn-sample').addEventListener('click', () => {
+  const btnSample = document.getElementById('btn-sample');
+  if (!btnSample) return;
+
+  btnSample.addEventListener('click', () => {
     generateSampleData(50);
     updateDataCount();
     alert('サンプルデータ50件を追加しました');
