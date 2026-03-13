@@ -365,8 +365,19 @@ function initMBTIGrid() {
       btn.style.setProperty('--mbti-bg', typeColor + '20');
       btn.style.setProperty('--mbti-glow', typeColor);
 
+      // 画像があればそちらを優先、なければSVGキャラクターをフォールバック
+      const en = { INTJ:'architect',INTP:'logician',ENTJ:'commander',ENTP:'debater',
+        INFJ:'advocate',INFP:'mediator',ENFJ:'protagonist',ENFP:'campaigner',
+        ISTJ:'logistician',ISFJ:'defender',ESTJ:'executive',ESFJ:'consul',
+        ISTP:'virtuoso',ISFP:'adventurer',ESTP:'entrepreneur',ESFP:'entertainer' }[type];
+      const imgPath = `images/avatars/${type.toLowerCase()}-${en}.svg`;
+
       btn.innerHTML =
-        createMBTIAvatar(type) +
+        `<div class="mbti-avatar-wrap">` +
+          `<img src="${imgPath}" alt="${type}" class="mbti-avatar-img" loading="lazy" ` +
+            `onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>` +
+          `<div class="mbti-avatar-fallback" style="display:none">${createMBTIAvatar(type)}</div>` +
+        `</div>` +
         `<span class="mbti-type-name">${type}</span>` +
         `<span class="mbti-label">${MBTI_LABELS[type]}</span>`;
 

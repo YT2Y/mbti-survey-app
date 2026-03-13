@@ -319,6 +319,22 @@ select option {
   box-shadow: 0 0 20px var(--mbti-glow, rgba(168, 85, 247, 0.3)), 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
+.mbti-avatar-wrap {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mbti-avatar-img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px var(--mbti-glow, rgba(168, 85, 247, 0.4)));
+  transition: transform 0.2s, filter 0.2s;
+}
+
 .mbti-avatar-svg {
   width: 52px;
   height: 52px;
@@ -326,11 +342,13 @@ select option {
   transition: transform 0.2s, filter 0.2s;
 }
 
+.mbti-btn:hover .mbti-avatar-img,
 .mbti-btn:hover .mbti-avatar-svg {
   transform: scale(1.1);
   filter: drop-shadow(0 0 10px var(--mbti-glow, rgba(168, 85, 247, 0.6)));
 }
 
+.mbti-btn.selected .mbti-avatar-img,
 .mbti-btn.selected .mbti-avatar-svg {
   filter: drop-shadow(0 0 14px var(--mbti-glow, rgba(168, 85, 247, 0.8)));
 }
@@ -692,6 +710,8 @@ tbody td.highlight {
     padding: 1.25rem;
   }
 
+  .mbti-avatar-wrap,
+  .mbti-avatar-img,
   .mbti-avatar-svg {
     width: 42px;
     height: 42px;
