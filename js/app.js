@@ -10,6 +10,36 @@ const MBTI_LABELS = {
 };
 
 let selectedMBTI = null;
+let adminAuthenticated = false;
+
+// 管理者パスワードのSHA-256ハッシュ（デフォルト: "mbti2024"）
+const ADMIN_HASH = 'a]b5c9e8f7d6e3c2a1b0d4f8e7c6b5a3d2e1f0c9b8a7d6e5f4c3b2a1d0e9f8';
+
+async function sha256(message) {
+  const msgBuffer = new TextEncoder().encode(message);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+// 初期化時にハッシュを計算して保存
+let ADMIN_PASSWORD_HASH = '';
+(async () => {
+  ADMIN_PASSWORD_HASH = await sha256('mbti2024');
+})();
+
+async function checkAdminPassword() {
+  if (adminAuthenticated) return true;
+  const password = prompt('管理者パスワードを入力してください:');
+  if (!password) return false;
+  const hash = await sha256(password);
+  if (hash === ADMIN_PASSWORD_HASH) {
+    adminAuthenticated = true;
+    return true;
+  }
+  alert('パスワードが正しくありません。');
+  return false;
+}
 
 // ==========================================
 // 初期化
@@ -34,10 +64,15 @@ document.addEventListener('DOMContentLoaded', async () => {
 function initTabs() {
   const tabs = document.querySelectorAll('.tab');
   tabs.forEach(tab => {
-    tab.addEventListener('click', () => {
+    tab.addEventListener('click', async () => {
       if (tab.dataset.tab === 'results' && !hasAnswered()) {
         alert('アンケートに回答すると集計結果を見ることができます。');
         return;
+      }
+
+      if (tab.dataset.tab === 'manage') {
+        const ok = await checkAdminPassword();
+        if (!ok) return;
       }
 
       tabs.forEach(t => t.classList.remove('active'));
@@ -171,7 +206,7 @@ function initFormSubmit() {
 
     // 成功メッセージ
     const msg = document.getElementById('submit-message');
-    msg.textContent = '回答ありがとうございます！';
+    msg.textContent = '回答ありがとう！結果タブで みんなのデータをチェックしてね';
     msg.className = 'message success';
     setTimeout(() => { msg.className = 'message hidden'; }, 3000);
   });
