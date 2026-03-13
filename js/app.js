@@ -25,89 +25,167 @@ const MBTI_TYPE_COLORS = {
   ISTP: '#fcd34d', ISFP: '#fdba74', ESTP: '#fbbf24', ESFP: '#fb923c'
 };
 
-// タイプ別のSVGシンボルパス
-const MBTI_SYMBOLS = {
-  // NT 分析家 - 幾何学的・知的なシンボル
-  INTJ: `<polygon points="24,6 42,38 6,38" fill="none" stroke="CL" stroke-width="2.5"/>
-         <polygon points="24,14 36,34 12,34" fill="CL" opacity="0.3"/>
-         <circle cx="24" cy="26" r="3" fill="CL"/>`,
-  INTP: `<circle cx="24" cy="24" r="14" fill="none" stroke="CL" stroke-width="2"/>
-         <ellipse cx="24" cy="24" rx="6" ry="14" fill="none" stroke="CL" stroke-width="1.5" opacity="0.6"/>
-         <ellipse cx="24" cy="24" rx="14" ry="6" fill="none" stroke="CL" stroke-width="1.5" opacity="0.6"/>
-         <circle cx="24" cy="24" r="3" fill="CL"/>`,
-  ENTJ: `<path d="M24,6 L24,42" stroke="CL" stroke-width="3"/>
-         <path d="M18,12 L30,12" stroke="CL" stroke-width="2.5"/>
-         <path d="M14,6 L34,6" stroke="CL" stroke-width="3"/>
-         <path d="M16,42 L32,42" stroke="CL" stroke-width="2.5"/>
-         <diamond><rect x="19" y="20" width="10" height="10" fill="CL" opacity="0.3" transform="rotate(45 24 25)"/></diamond>`,
-  ENTP: `<circle cx="24" cy="18" r="8" fill="none" stroke="CL" stroke-width="2"/>
-         <path d="M20,26 Q24,40 28,26" fill="none" stroke="CL" stroke-width="2"/>
-         <line x1="24" y1="10" x2="24" y2="16" stroke="CL" stroke-width="2.5"/>
-         <circle cx="24" cy="18" r="2" fill="CL"/>`,
-
-  // NF 外交官 - 有機的・やわらかいシンボル
-  INFJ: `<path d="M24,8 Q36,20 24,40 Q12,20 24,8Z" fill="CL" opacity="0.2" stroke="CL" stroke-width="2"/>
-         <circle cx="24" cy="22" r="5" fill="none" stroke="CL" stroke-width="1.5"/>
-         <circle cx="24" cy="22" r="2" fill="CL"/>`,
-  INFP: `<path d="M24,10 L27,18 L36,18 L29,24 L32,33 L24,28 L16,33 L19,24 L12,18 L21,18Z" fill="CL" opacity="0.25" stroke="CL" stroke-width="1.8"/>
-         <circle cx="24" cy="22" r="4" fill="CL" opacity="0.5"/>`,
-  ENFJ: `<circle cx="24" cy="24" r="14" fill="CL" opacity="0.15"/>
-         <path d="M24,10 L24,38 M10,24 L38,24 M14,14 L34,34 M34,14 L14,34" stroke="CL" stroke-width="1.5" opacity="0.6"/>
-         <circle cx="24" cy="24" r="6" fill="none" stroke="CL" stroke-width="2"/>
-         <circle cx="24" cy="24" r="2.5" fill="CL"/>`,
-  ENFP: `<path d="M24,8 C32,8 38,16 34,24 C38,32 32,40 24,36 C16,40 10,32 14,24 C10,16 16,8 24,8Z" fill="CL" opacity="0.2" stroke="CL" stroke-width="2"/>
-         <circle cx="24" cy="24" r="4" fill="CL" opacity="0.5"/>`,
-
-  // SJ 番人 - 安定的・構造的なシンボル
-  ISTJ: `<rect x="10" y="10" width="28" height="28" rx="2" fill="none" stroke="CL" stroke-width="2"/>
-         <line x1="10" y1="18" x2="38" y2="18" stroke="CL" stroke-width="1.5"/>
-         <line x1="10" y1="26" x2="38" y2="26" stroke="CL" stroke-width="1.5"/>
-         <line x1="10" y1="34" x2="38" y2="34" stroke="CL" stroke-width="1.5"/>
-         <rect x="10" y="10" width="28" height="8" fill="CL" opacity="0.2"/>`,
-  ISFJ: `<path d="M24,8 L24,14 M24,34 L24,40 M8,24 L14,24 M34,24 L40,24" stroke="CL" stroke-width="2"/>
-         <circle cx="24" cy="24" r="12" fill="none" stroke="CL" stroke-width="2.5"/>
-         <circle cx="24" cy="24" r="6" fill="CL" opacity="0.25"/>
-         <circle cx="24" cy="24" r="2" fill="CL"/>`,
-  ESTJ: `<rect x="12" y="14" width="24" height="24" fill="none" stroke="CL" stroke-width="2"/>
-         <polygon points="24,6 36,14 12,14" fill="CL" opacity="0.3" stroke="CL" stroke-width="1.5"/>
-         <line x1="24" y1="14" x2="24" y2="38" stroke="CL" stroke-width="1.5"/>
-         <line x1="12" y1="26" x2="36" y2="26" stroke="CL" stroke-width="1.5"/>`,
-  ESFJ: `<circle cx="24" cy="16" r="6" fill="CL" opacity="0.3" stroke="CL" stroke-width="1.5"/>
-         <circle cx="16" cy="30" r="6" fill="CL" opacity="0.3" stroke="CL" stroke-width="1.5"/>
-         <circle cx="32" cy="30" r="6" fill="CL" opacity="0.3" stroke="CL" stroke-width="1.5"/>
-         <line x1="24" y1="22" x2="16" y2="24" stroke="CL" stroke-width="1.5"/>
-         <line x1="24" y1="22" x2="32" y2="24" stroke="CL" stroke-width="1.5"/>
-         <line x1="16" y1="36" x2="32" y2="36" stroke="CL" stroke-width="1.5" opacity="0.5"/>`,
-
-  // SP 探検家 - ダイナミック・アクティブなシンボル
-  ISTP: `<circle cx="24" cy="24" r="14" fill="none" stroke="CL" stroke-width="2"/>
-         <circle cx="24" cy="24" r="3" fill="CL"/>
-         <path d="M24,10 L26,20 L24,24" stroke="CL" stroke-width="2" fill="none"/>
-         <path d="M24,24 L32,28" stroke="CL" stroke-width="1.5"/>`,
-  ISFP: `<path d="M12,36 Q16,20 24,12 Q32,20 36,36" fill="none" stroke="CL" stroke-width="2"/>
-         <path d="M18,36 Q20,26 24,18 Q28,26 30,36" fill="CL" opacity="0.2"/>
-         <circle cx="24" cy="16" r="3" fill="CL" opacity="0.6"/>`,
-  ESTP: `<polygon points="24,6 44,36 4,36" fill="none" stroke="CL" stroke-width="2.5"/>
-         <polygon points="24,16 34,34 14,34" fill="CL" opacity="0.15"/>
-         <line x1="24" y1="6" x2="24" y2="34" stroke="CL" stroke-width="1.5" opacity="0.5"/>
-         <circle cx="24" cy="28" r="3" fill="CL" opacity="0.5"/>`,
-  ESFP: `<path d="M24,8 L28,20 L40,20 L30,28 L34,40 L24,32 L14,40 L18,28 L8,20 L20,20Z" fill="CL" opacity="0.2" stroke="CL" stroke-width="2"/>
-         <path d="M24,14 L26,22 L34,22 L28,27 L30,35 L24,30 L18,35 L20,27 L14,22 L22,22Z" fill="CL" opacity="0.3"/>`
-};
-
-// インラインSVGアバターを生成
+// 16personalities風キャラクターSVGを生成
+// 各タイプにジオメトリック人物 + タイプ固有の小道具
 function createMBTIAvatar(type) {
-  const color = MBTI_TYPE_COLORS[type];
-  const symbol = MBTI_SYMBOLS[type].replace(/CL/g, color);
-  return `<svg class="mbti-avatar-svg" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
-    <defs><radialGradient id="bg-${type}" cx="50%" cy="50%" r="50%">
-      <stop offset="0%" stop-color="${color}" stop-opacity="0.15"/>
-      <stop offset="100%" stop-color="${color}" stop-opacity="0.05"/>
-    </radialGradient></defs>
-    <circle cx="24" cy="24" r="23" fill="url(#bg-${type})" stroke="${color}" stroke-width="1" opacity="0.6"/>
-    ${symbol}
-  </svg>`
-;
+  const c = MBTI_TYPE_COLORS[type];
+  const group = getMBTIGroupForAvatar(type);
+  // グループカラー（背景用）
+  const gc = MBTI_GROUP_NEON[group];
+  // ダークカラー（影用）
+  const dc = { NT: '#7c3aed', NF: '#059669', SJ: '#2563eb', SP: '#d97706' }[group];
+
+  // 共通の体パーツ
+  const head = `<circle cx="40" cy="22" r="12" fill="${c}"/>
+    <circle cx="40" cy="22" r="11" fill="${c}" stroke="${dc}" stroke-width="0.5"/>`;
+  const eyes = `<circle cx="36" cy="20" r="1.5" fill="#1e1b4b"/>
+    <circle cx="44" cy="20" r="1.5" fill="#1e1b4b"/>
+    <circle cx="36.5" cy="19.5" r="0.5" fill="white"/>
+    <circle cx="44.5" cy="19.5" r="0.5" fill="white"/>`;
+  const mouth = `<path d="M37,25 Q40,28 43,25" fill="none" stroke="#1e1b4b" stroke-width="0.8" stroke-linecap="round"/>`;
+  const body = `<path d="M28,34 Q40,30 52,34 L54,60 Q40,56 26,60Z" fill="${c}"/>
+    <path d="M28,34 Q40,30 52,34 L54,60 Q40,56 26,60Z" fill="${dc}" opacity="0.15"/>`;
+
+  // タイプ別の小道具・ヘアスタイル
+  const props = {
+    // NT 分析家（紫系）
+    INTJ: `<path d="M28,14 Q32,6 40,10 Q48,6 52,14 L52,22 Q48,16 40,18 Q32,16 28,22Z" fill="${dc}"/>
+      ${head}${eyes}<path d="M38,25 L42,25" stroke="#1e1b4b" stroke-width="0.8" stroke-linecap="round"/>
+      ${body}
+      <rect x="20" y="38" width="12" height="16" rx="1" fill="#312e81" opacity="0.7"/>
+      <rect x="22" y="40" width="8" height="3" rx="0.5" fill="${c}" opacity="0.5"/>
+      <rect x="22" y="45" width="8" height="3" rx="0.5" fill="${c}" opacity="0.3"/>`,
+
+    INTP: `<path d="M30,16 Q34,8 40,12 Q46,8 50,16 Q50,20 48,22 L32,22 Q30,20 30,16Z" fill="${dc}" opacity="0.8"/>
+      <path d="M46,12 Q52,8 54,14" fill="none" stroke="${dc}" stroke-width="1.5"/>
+      ${head}${eyes}${mouth}${body}
+      <circle cx="22" cy="42" r="8" fill="none" stroke="${dc}" stroke-width="1.5"/>
+      <circle cx="22" cy="42" r="3" fill="${dc}" opacity="0.3"/>
+      <line x1="22" y1="34" x2="22" y2="38" stroke="${dc}" stroke-width="1"/>`,
+
+    ENTJ: `<path d="M28,18 Q32,8 40,10 Q48,8 52,18 L50,22 L30,22Z" fill="${dc}"/>
+      ${head}${eyes}<path d="M36,25 Q40,27 44,25" fill="none" stroke="#1e1b4b" stroke-width="1" stroke-linecap="round"/>
+      ${body}
+      <path d="M32,32 L22,28 L18,18 L24,20 L22,14" fill="none" stroke="${dc}" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="20,10 24,14 22,14" fill="${gc}"/>`,
+
+    ENTP: `<path d="M30,16 Q34,6 42,10 Q50,6 52,16 L50,22 L30,22Z" fill="${dc}"/>
+      <path d="M50,14 Q54,10 56,14" fill="none" stroke="${dc}" stroke-width="1.5"/>
+      ${head}${eyes}<path d="M36,25 Q40,29 44,25" fill="none" stroke="#1e1b4b" stroke-width="0.8"/>
+      ${body}
+      <circle cx="24" cy="36" r="4" fill="${gc}" opacity="0.8"/>
+      <path d="M24,32 L24,28" stroke="${gc}" stroke-width="1.5"/>
+      <path d="M22,34 L20,32 M26,34 L28,32 M22,38 L20,40 M26,38 L28,40" stroke="${gc}" stroke-width="1" opacity="0.6"/>`,
+
+    // NF 外交官（緑系）
+    INFJ: `<path d="M30,18 Q34,10 40,14 Q46,10 50,18 L50,24 Q46,20 40,22 Q34,20 30,24Z" fill="${dc}"/>
+      <path d="M30,18 L28,24" stroke="${dc}" stroke-width="1.5"/>
+      ${head}${eyes}${mouth}${body}
+      <path d="M18,36 Q16,32 20,30" fill="none" stroke="${gc}" stroke-width="1.5" opacity="0.6"/>
+      <path d="M16,40 Q14,36 18,34" fill="none" stroke="${gc}" stroke-width="1" opacity="0.4"/>
+      <circle cx="22" cy="44" r="5" fill="${gc}" opacity="0.2" stroke="${gc}" stroke-width="0.8"/>`,
+
+    INFP: `<path d="M30,16 Q36,8 40,14 Q44,8 50,16 L48,24 L32,24Z" fill="${dc}" opacity="0.7"/>
+      <path d="M48,16 Q52,12 54,18 Q56,24 52,26" fill="none" stroke="${dc}" stroke-width="1.2"/>
+      ${head}${eyes}${mouth}${body}
+      <path d="M20,38 Q18,34 22,36 Q18,32 24,34" fill="${gc}" opacity="0.5"/>
+      <circle cx="20" cy="42" r="2" fill="${gc}" opacity="0.6"/>
+      <path d="M16,46 Q14,44 18,42" fill="none" stroke="${gc}" stroke-width="1" opacity="0.4"/>`,
+
+    ENFJ: `<path d="M28,16 Q34,6 40,12 Q46,6 52,16 L50,22 L30,22Z" fill="${dc}"/>
+      ${head}${eyes}<path d="M35,24 Q40,29 45,24" fill="none" stroke="#1e1b4b" stroke-width="1" stroke-linecap="round"/>
+      ${body}
+      <circle cx="24" cy="40" r="6" fill="${gc}" opacity="0.15" stroke="${gc}" stroke-width="1"/>
+      <path d="M24,34 L24,46 M18,40 L30,40" stroke="${gc}" stroke-width="1.2"/>`,
+
+    ENFP: `<path d="M28,16 Q34,4 42,12 Q48,4 54,16 L52,24 L30,24Z" fill="${dc}"/>
+      <path d="M54,12 Q58,8 58,16" fill="none" stroke="${dc}" stroke-width="1.2"/>
+      <path d="M28,14 Q24,10 26,16" fill="none" stroke="${dc}" stroke-width="1.2"/>
+      ${head}${eyes}<path d="M35,24 Q40,29 45,24" fill="none" stroke="#1e1b4b" stroke-width="1"/>
+      ${body}
+      <path d="M18,38 L14,34 M22,36 L20,32" stroke="${gc}" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+      <circle cx="16" cy="32" r="2" fill="${gc}" opacity="0.5"/>
+      <circle cx="22" cy="30" r="1.5" fill="${gc}" opacity="0.4"/>`,
+
+    // SJ 番人（青系）
+    ISTJ: `<path d="M30,18 Q34,12 40,14 Q46,12 50,18 L50,22 L30,22Z" fill="${dc}"/>
+      ${head}${eyes}<path d="M38,25 L42,25" stroke="#1e1b4b" stroke-width="0.8" stroke-linecap="round"/>
+      ${body}
+      <rect x="18" y="36" width="14" height="18" rx="1" fill="#1e3a5f" opacity="0.6"/>
+      <line x1="20" y1="40" x2="30" y2="40" stroke="${c}" stroke-width="0.8" opacity="0.5"/>
+      <line x1="20" y1="44" x2="30" y2="44" stroke="${c}" stroke-width="0.8" opacity="0.5"/>
+      <line x1="20" y1="48" x2="30" y2="48" stroke="${c}" stroke-width="0.8" opacity="0.5"/>`,
+
+    ISFJ: `<path d="M30,16 Q36,8 40,14 Q44,8 50,16 L48,22 L32,22Z" fill="${dc}" opacity="0.8"/>
+      ${head}${eyes}${mouth}${body}
+      <path d="M20,34 L16,30 Q14,26 18,28 L22,32" fill="none" stroke="${gc}" stroke-width="1.5"/>
+      <path d="M16,30 Q12,32 14,36 Q16,40 20,38" fill="${gc}" opacity="0.2" stroke="${gc}" stroke-width="0.8"/>`,
+
+    ESTJ: `<path d="M28,16 Q34,8 40,12 Q46,8 52,16 L50,22 L30,22Z" fill="${dc}"/>
+      ${head}${eyes}<path d="M36,25 Q40,27 44,25" fill="none" stroke="#1e1b4b" stroke-width="0.8"/>
+      ${body}
+      <rect x="16" y="32" width="16" height="20" rx="1" fill="${dc}" opacity="0.3"/>
+      <path d="M24,32 L24,52" stroke="${gc}" stroke-width="1"/>
+      <path d="M18,36 L30,36" stroke="${gc}" stroke-width="0.8" opacity="0.6"/>`,
+
+    ESFJ: `<path d="M28,16 Q34,6 40,12 Q46,6 52,16 L50,24 L30,24Z" fill="${dc}"/>
+      <path d="M28,14 Q24,10 26,18" fill="none" stroke="${dc}" stroke-width="1.2"/>
+      ${head}${eyes}<path d="M35,24 Q40,29 45,24" fill="none" stroke="#1e1b4b" stroke-width="0.8"/>
+      ${body}
+      <circle cx="20" cy="38" r="4" fill="${gc}" opacity="0.2" stroke="${gc}" stroke-width="0.8"/>
+      <circle cx="28" cy="44" r="3" fill="${gc}" opacity="0.15" stroke="${gc}" stroke-width="0.8"/>
+      <path d="M22,36 L26,42" stroke="${gc}" stroke-width="0.8" opacity="0.5"/>`,
+
+    // SP 探検家（黄系）
+    ISTP: `<path d="M30,18 Q34,12 40,14 Q46,12 50,18 L50,22 L30,22Z" fill="${dc}"/>
+      ${head}${eyes}<path d="M38,25 L42,25" stroke="#1e1b4b" stroke-width="0.8"/>
+      ${body}
+      <path d="M18,36 L14,42 L20,42 L16,48" fill="none" stroke="${gc}" stroke-width="2" stroke-linecap="round"/>
+      <circle cx="18" cy="40" r="6" fill="${gc}" opacity="0.1"/>`,
+
+    ISFP: `<path d="M30,16 Q36,6 42,12 Q48,6 52,16 L50,24 L30,24Z" fill="${dc}" opacity="0.7"/>
+      <path d="M52,14 Q56,10 56,18" fill="none" stroke="${dc}" stroke-width="1"/>
+      ${head}${eyes}${mouth}${body}
+      <circle cx="20" cy="40" r="3" fill="${gc}" opacity="0.5"/>
+      <circle cx="26" cy="38" r="2" fill="${gc}" opacity="0.4"/>
+      <circle cx="18" cy="46" r="2.5" fill="${gc}" opacity="0.3"/>
+      <path d="M22,44 Q20,42 22,40" fill="none" stroke="${dc}" stroke-width="0.8"/>`,
+
+    ESTP: `<path d="M28,16 Q34,6 40,12 Q46,6 52,16 L50,22 L30,22Z" fill="${dc}"/>
+      ${head}${eyes}<path d="M35,24 Q40,28 45,24" fill="none" stroke="#1e1b4b" stroke-width="1"/>
+      ${body}
+      <path d="M16,34 L12,28 L16,22" fill="none" stroke="${gc}" stroke-width="2" stroke-linecap="round"/>
+      <polygon points="16,20 18,24 14,24" fill="${gc}"/>`,
+
+    ESFP: `<path d="M26,16 Q34,2 42,12 Q50,2 56,16 L52,24 L28,24Z" fill="${dc}"/>
+      <path d="M56,12 Q60,6 58,16" fill="none" stroke="${dc}" stroke-width="1.2"/>
+      <path d="M26,14 Q22,8 24,16" fill="none" stroke="${dc}" stroke-width="1.2"/>
+      ${head}${eyes}<path d="M34,24 Q40,30 46,24" fill="none" stroke="#1e1b4b" stroke-width="1"/>
+      ${body}
+      <circle cx="18" cy="36" r="3" fill="${gc}" opacity="0.5"/>
+      <circle cx="14" cy="42" r="2" fill="${gc}" opacity="0.4"/>
+      <circle cx="22" cy="44" r="2.5" fill="${gc}" opacity="0.3"/>
+      <path d="M16,38 L18,42 M20,40 L18,44" stroke="${gc}" stroke-width="0.8" opacity="0.5"/>`
+  };
+
+  return `<svg class="mbti-avatar-svg" viewBox="10 4 56 58" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="bg-${type}" cx="50%" cy="40%" r="50%">
+        <stop offset="0%" stop-color="${gc}" stop-opacity="0.12"/>
+        <stop offset="100%" stop-color="${gc}" stop-opacity="0.02"/>
+      </radialGradient>
+    </defs>
+    <rect x="10" y="4" width="56" height="58" rx="12" fill="url(#bg-${type})"/>
+    ${props[type]}
+  </svg>`;
+}
+
+// getMBTIGroupの前方参照用（アバター生成で使用）
+function getMBTIGroupForAvatar(type) {
+  if (['INTJ','INTP','ENTJ','ENTP'].includes(type)) return 'NT';
+  if (['INFJ','INFP','ENFJ','ENFP'].includes(type)) return 'NF';
+  if (['ISTJ','ISFJ','ESTJ','ESFJ'].includes(type)) return 'SJ';
+  return 'SP';
 }
 
 function getMBTIGroup(type) {
