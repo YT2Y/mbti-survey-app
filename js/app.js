@@ -9,14 +9,6 @@ const MBTI_LABELS = {
   ISTP: '巨匠',   ISFP: '冒険家', ESTP: '起業家', ESFP: 'エンターテイナー'
 };
 
-// 16personalities 英語名（画像URL用）
-const MBTI_EN_LABELS = {
-  INTJ: 'architect', INTP: 'logician', ENTJ: 'commander', ENTP: 'debater',
-  INFJ: 'advocate', INFP: 'mediator', ENFJ: 'protagonist', ENFP: 'campaigner',
-  ISTJ: 'logistician', ISFJ: 'defender', ESTJ: 'executive', ESFJ: 'consul',
-  ISTP: 'virtuoso', ISFP: 'adventurer', ESTP: 'entrepreneur', ESFP: 'entertainer'
-};
-
 // 気質グループ別のネオンカラー
 const MBTI_GROUP_NEON = {
   NT: '#c084fc', // パープルネオン
@@ -25,16 +17,27 @@ const MBTI_GROUP_NEON = {
   SP: '#fbbf24'  // イエローネオン
 };
 
+// タイプ別のアイコン絵文字
+const MBTI_EMOJI = {
+  INTJ: '🏛️', INTP: '🔬', ENTJ: '👑', ENTP: '💡',
+  INFJ: '🔮', INFP: '🦋', ENFJ: '🌟', ENFP: '🎪',
+  ISTJ: '📋', ISFJ: '🛡️', ESTJ: '⚖️', ESFJ: '🤝',
+  ISTP: '🔧', ISFP: '🎨', ESTP: '🚀', ESFP: '🎭'
+};
+
+// タイプ別の個別カラー
+const MBTI_TYPE_COLORS = {
+  INTJ: '#a78bfa', INTP: '#c4b5fd', ENTJ: '#8b5cf6', ENTP: '#d8b4fe',
+  INFJ: '#6ee7b7', INFP: '#86efac', ENFJ: '#34d399', ENFP: '#a7f3d0',
+  ISTJ: '#93c5fd', ISFJ: '#7dd3fc', ESTJ: '#60a5fa', ESFJ: '#a5b4fc',
+  ISTP: '#fcd34d', ISFP: '#fdba74', ESTP: '#fbbf24', ESFP: '#fb923c'
+};
+
 function getMBTIGroup(type) {
   if (['INTJ','INTP','ENTJ','ENTP'].includes(type)) return 'NT';
   if (['INFJ','INFP','ENFJ','ENFP'].includes(type)) return 'NF';
   if (['ISTJ','ISFJ','ESTJ','ESFJ'].includes(type)) return 'SJ';
   return 'SP';
-}
-
-function getMBTIAvatarUrl(type) {
-  const en = MBTI_EN_LABELS[type];
-  return `https://static.neris-assets.com/images/personality-types/avatars/faces/${type.toLowerCase()}-${en}-s3-v5-male.svg?v=1`;
 }
 
 let selectedMBTI = null;
@@ -202,23 +205,15 @@ function initMBTIGrid() {
       btn.className = 'mbti-btn';
       btn.dataset.type = type;
       btn.dataset.group = group;
-      const groupColor = MBTI_GROUP_NEON[group];
-      btn.style.setProperty('--mbti-color', groupColor);
-      btn.style.setProperty('--mbti-bg', groupColor + '20');
-      btn.style.setProperty('--mbti-glow', groupColor);
+      const typeColor = MBTI_TYPE_COLORS[type];
+      btn.style.setProperty('--mbti-color', typeColor);
+      btn.style.setProperty('--mbti-bg', typeColor + '20');
+      btn.style.setProperty('--mbti-glow', typeColor);
 
-      const img = document.createElement('img');
-      img.src = getMBTIAvatarUrl(type);
-      img.alt = type;
-      img.className = 'mbti-avatar';
-      img.loading = 'lazy';
-      img.onerror = function() { this.style.display = 'none'; };
-
-      btn.appendChild(img);
-      btn.insertAdjacentHTML('beforeend',
+      btn.innerHTML =
+        `<span class="mbti-emoji">${MBTI_EMOJI[type]}</span>` +
         `<span class="mbti-type-name">${type}</span>` +
-        `<span class="mbti-label">${MBTI_LABELS[type]}</span>`
-      );
+        `<span class="mbti-label">${MBTI_LABELS[type]}</span>`;
 
       btn.addEventListener('click', () => {
         document.querySelectorAll('.mbti-btn').forEach(b => b.classList.remove('selected'));
