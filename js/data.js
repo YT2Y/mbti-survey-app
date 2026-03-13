@@ -3,6 +3,7 @@
 // ==========================================
 
 const STORAGE_KEY = 'mbti_survey_responses';
+const ANSWERED_KEY = 'mbti_survey_answered';
 
 const PREFECTURES = [
   { code: '01', name: '北海道', region: '北海道' },
@@ -146,8 +147,17 @@ function getPrefectureName(code) {
   return pref ? pref.name : code;
 }
 
+function hasAnswered() {
+  return localStorage.getItem(ANSWERED_KEY) === 'true';
+}
+
+function markAsAnswered() {
+  localStorage.setItem(ANSWERED_KEY, 'true');
+}
+
 function clearAllData() {
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(ANSWERED_KEY);
 }
 
 function exportData() {

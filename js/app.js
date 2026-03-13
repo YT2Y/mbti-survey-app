@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initFormSubmit();
   initDataManagement();
   loadMap('map-container');
+  updateResultsTabState();
 });
 
 // ==========================================
@@ -32,6 +33,11 @@ function initTabs() {
   const tabs = document.querySelectorAll('.tab');
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
+      if (tab.dataset.tab === 'results' && !hasAnswered()) {
+        alert('アンケートに回答すると集計結果を見ることができます。');
+        return;
+      }
+
       tabs.forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
       tab.classList.add('active');
@@ -45,6 +51,16 @@ function initTabs() {
       }
     });
   });
+}
+
+function updateResultsTabState() {
+  const resultsTab = document.querySelector('[data-tab="results"]');
+  if (!resultsTab) return;
+  if (hasAnswered()) {
+    resultsTab.classList.remove('tab-locked');
+  } else {
+    resultsTab.classList.add('tab-locked');
+  }
 }
 
 // ==========================================
@@ -127,6 +143,8 @@ function initFormSubmit() {
     if (!prefCode || !selectedMBTI) return;
 
     addResponse(prefCode, selectedMBTI);
+    markAsAnswered();
+    updateResultsTabState();
 
     // リセット
     prefSelect.value = '';
