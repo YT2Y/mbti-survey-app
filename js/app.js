@@ -365,17 +365,18 @@ function initMBTIGrid() {
       btn.style.setProperty('--mbti-bg', typeColor + '20');
       btn.style.setProperty('--mbti-glow', typeColor);
 
-      // 画像があればそちらを優先、なければSVGキャラクターをフォールバック
+      // 公式16personalities画像を直接参照、ロード失敗時はSVGキャラクターにフォールバック
       const en = { INTJ:'architect',INTP:'logician',ENTJ:'commander',ENTP:'debater',
         INFJ:'advocate',INFP:'mediator',ENFJ:'protagonist',ENFP:'campaigner',
         ISTJ:'logistician',ISFJ:'defender',ESTJ:'executive',ESFJ:'consul',
         ISTP:'virtuoso',ISFP:'adventurer',ESTP:'entrepreneur',ESFP:'entertainer' }[type];
-      const imgPath = `images/avatars/${type.toLowerCase()}-${en}.svg`;
-
+      const officialBase = 'https://www.16personalities.com/static/images/personality-types/avatars';
+      const slug = `${type.toLowerCase()}-${en}`;
+      // 公式URL → ローカル → SVGフォールバック の3段階
       btn.innerHTML =
         `<div class="mbti-avatar-wrap">` +
-          `<img src="${imgPath}" alt="${type}" class="mbti-avatar-img" loading="lazy" ` +
-            `onerror="this.style.display='none';this.nextElementSibling.style.display='block'"/>` +
+          `<img src="${officialBase}/${slug}-male.svg?v=3" alt="${type}" class="mbti-avatar-img" loading="lazy" ` +
+            `onerror="this.onerror=function(){this.onerror=function(){this.style.display='none';this.nextElementSibling.style.display='block';};this.src='images/avatars/${slug}.svg';};this.src='${officialBase}/${slug}-female.svg?v=3'"/>` +
           `<div class="mbti-avatar-fallback" style="display:none">${createMBTIAvatar(type)}</div>` +
         `</div>` +
         `<span class="mbti-type-name">${type}</span>` +
