@@ -91,6 +91,11 @@ const MBTI_GROUP_COLORS = {
 
 const REGIONS = ['北海道', '東北', '関東', '中部', '近畿', '中国', '四国', '九州・沖縄'];
 
+const AGE_GROUPS = ['~19', '20-29', '30-39', '40-49', '50-59', '60~'];
+const AGE_LABELS = { '~19': '19歳以下', '20-29': '20代', '30-39': '30代', '40-49': '40代', '50-59': '50代', '60~': '60歳以上' };
+const GENDERS = ['male', 'female', 'other', 'no-answer'];
+const GENDER_LABELS = { male: '男性', female: '女性', other: 'その他', 'no-answer': '回答しない' };
+
 // ==========================================
 // localStorage CRUD
 // ==========================================
@@ -104,12 +109,14 @@ function saveResponses(responses) {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
 }
 
-function addResponse(prefectureCode, mbtiType) {
+function addResponse(prefectureCode, mbtiType, age, gender) {
   const responses = getAllResponses();
   responses.push({
     id: Date.now().toString(36) + Math.random().toString(36).substr(2, 6),
     prefecture: prefectureCode,
     mbtiType: mbtiType,
+    age: age,
+    gender: gender,
     timestamp: new Date().toISOString()
   });
   saveResponses(responses);
@@ -178,10 +185,14 @@ function generateSampleData(count) {
   for (let i = 0; i < count; i++) {
     const pref = PREFECTURES[Math.floor(Math.random() * PREFECTURES.length)];
     const mbti = MBTI_TYPES[Math.floor(Math.random() * MBTI_TYPES.length)];
+    const age = AGE_GROUPS[Math.floor(Math.random() * AGE_GROUPS.length)];
+    const gender = GENDERS[Math.floor(Math.random() * GENDERS.length)];
     responses.push({
       id: Date.now().toString(36) + Math.random().toString(36).substr(2, 6),
       prefecture: pref.code,
       mbtiType: mbti,
+      age: age,
+      gender: gender,
       timestamp: new Date().toISOString()
     });
   }
