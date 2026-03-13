@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000">
+
+  <!-- ===================== -->
+  <!-- HOKKAIDO              -->
+  <!-- ===================== -->
+  <g class="prefecture" data-code="01" data-name="Hokkaido">
+    <path d="M580,45 L610,30 L640,25 L670,20 L700,25 L720,40 L735,60 L740,85 L735,110 L720,130 L700,145 L680,155 L660,160 L640,165 L625,175 L610,185 L595,190 L575,188 L555,180 L540,170 L530,155 L525,140 L530,120 L540,105 L555,95 L565,80 L570,65 Z
+    M575,188 L560,200 L545,210 L530,215 L520,210 L525,195 L535,185 L550,180 Z" />
+  </g>
+
+  <!-- ===================== -->
+  <!-- TOHOKU                -->
+  <!-- ===================== -->
+  <g class="prefecture" data-code="02" data-name="Aomori">
+    <path d="M560,230 L580,225 L600,222 L620,225 L640,230 L650,240 L645,255 L630,260 L615,258 L610,265 L600,260 L590,265 L580,258 L570,260 L560,255 L555,245 Z" />
+  </g>
+  <g class="prefecture" data-code="03" data-name="Iwate">
+    <path d="M600,260 L615,258 L630,260 L645,265 L650,280 L648,300 L640,315 L630,325 L615,328 L600,325 L590,315 L585,300 L585,280 L590,265 Z" />
+  </g>
+  <g class="prefecture" data-code="04" data-name="Miyagi">
+    <path d="M600,325 L615,328 L630,325 L640,335 L645,350 L638,360 L625,365 L610,362 L598,355 L590,345 L590,335 Z" />
+  </g>
+  <g class="prefecture" data-code="05" data-name="Akita">
+    <path d="M560,260 L580,258 L590,265 L585,280 L585,300 L590,315 L585,325 L575,330 L562,325 L555,310 L550,295 L550,275 L555,265 Z" />
+  </g>
+  <g class="prefecture" data-code="06" data-name="Yamagata">
+    <path d="M562,325 L575,330 L585,325 L590,335 L590,345 L585,360 L575,370 L565,372 L555,365 L550,350 L550,338 Z" />
+  </g>
+  <g class="prefecture" data-code="07" data-name="Fukushima">
+    <path d="M555,365 L565,372 L575,370 L585,360 L598,355 L610,362 L625,365 L635,375 L630,390 L620,400 L605,405 L590,402 L575,398 L560,390 L550,380 Z" />
+  </g>
+
+  <!-- ===================== -->
+  <!-- KANTO                 -->
+  <!-- ===================== -->
+  <g class="prefecture" data-code="08" data-name="Ibaraki">
+    <path d="M605,405 L620,400 L630,405 L635,420 L632,435 L625,445 L615,448 L605,445 L598,435 L598,420 Z" />
+  </g>
+  <g class="prefecture" data-code="09" data-name="Tochigi">
+    <path d="M575,398 L590,402 L605,405 L598,420 L595,435 L585,440 L575,438 L568,428 L565,415 L568,405 Z" />
+  </g>
+  <g class="prefecture" data-code="10" data-name="Gunma">
+    <path d="M545,400 L560,390 L575,398 L568,405 L565,415 L568,428 L560,435 L548,432 L540,422 L540,410 Z" />
+  </g>
+  <g class="prefecture" data-code="11" data-name="Saitama">
+    <path d="M548,432 L560,435 L575,438 L580,448 L575,458 L562,462 L550,458 L542,450 L542,440 Z" />
+  </g>
+  <g class="prefecture" data-code="12" data-name="Chiba">
+    <path d="M600,455 L615,448 L625,455 L630,470 L625,488 L615,498 L600,500 L590,492 L585,478 L588,465 Z" />
+  </g>
+  <g class="prefecture" data-code="13" data-name="Tokyo">
+    <path d="M562,462 L575,458 L585,462 L588,465 L585,478 L578,482 L568,480 L560,475 L558,468 Z" />
+  </g>
+  <g class="prefecture" data-code="14" data-name="Kanagawa">
+    <path d="M558,475 L568,480 L578,482 L585,488 L582,498 L572,502 L562,498 L555,490 L555,482 Z" />
+  </g>
+
+  <!-- ===================== -->
+  <!-- CHUBU                 -->
+  <!-- ===================== -->
+  <g class="prefecture" data-code="15" data-name="Niigata">
+    <path d="M520,340 L535,335 L550,338 L555,365 L550,380 L545,400 L530,395 L518,385 L510,370 L508,355 Z" />
+  </g>
+  <g class="prefecture" data-code="16" data-name="Toyama">
+    <path d="M480,395 L498,388 L510,395 L512,410 L505,420 L492,422 L482,415 L478,405 Z" />
+  </g>
+  <g class="prefecture" data-code="17" data-name="Ishikawa">
+    <path d="M468,365 L478,360 L488,368 L490,382 L485,392 L480,395 L478,405 L470,400 L462,388 L460,375 Z" />
+  </g>
+  <g class="prefecture" data-code="18" data-name="Fukui">
+    <path d="M448,408 L462,400 L470,400 L478,405 L482,415 L478,428 L468,435 L455,432 L445,422 Z" />
+  </g>
+  <g class="prefecture" data-code="19" data-name="Yamanashi">
+    <path d="M535,448 L548,450 L555,458 L555,470 L548,478 L535,480 L528,472 L525,460 Z" />
+  </g>
+  <g class="prefecture" data-code="20" data-name="Nagano">
+    <path d="M510,395 L530,395 L545,400 L540,410 L542,440 L535,448 L525,460 L515,458 L505,450 L498,435 L500,420 L505,408 Z" />
+  </g>
+  <g class="prefecture" data-code="21" data-name="Gifu">
+    <path d="M468,435 L478,428 L492,422 L505,420 L498,435 L505,450 L500,462 L488,465 L475,460 L465,450 Z" />
+  </g>
+  <g class="prefecture" data-code="22" data-name="Shizuoka">
+    <path d="M505,478 L520,472 L535,480 L548,478 L555,490 L555,505 L545,515 L530,518 L515,512 L505,500 L500,488 Z" />
+  </g>
+  <g class="prefecture" data-code="23" data-name="Aichi">
+    <path d="M475,475 L488,465 L500,468 L505,478 L500,492 L492,500 L480,502 L470,495 L468,485 Z" />
+  </g>
+
+  <!-- ===================== -->
+  <!-- KINKI (KANSAI)        -->
+  <!-- ===================== -->
+  <g class="prefecture" data-code="24" data-name="Mie">
+    <path d="M458,475 L468,470 L475,475 L468,485 L470,500 L465,515 L455,525 L445,520 L440,508 L442,492 L448,480 Z" />
+  </g>
+  <g class="prefecture" data-code="25" data-name="Shiga">
+    <path d="M442,440 L455,438 L465,445 L465,460 L458,470 L448,472 L438,465 L435,452 Z" />
+  </g>
+  <g class="prefecture" data-code="26" data-name="Kyoto">
+    <path d="M415,415 L430,410 L442,418 L445,432 L442,440 L435,452 L425,458 L412,455 L405,442 L408,428 Z" />
+  </g>
+  <g class="prefecture" data-code="27" data-name="Osaka">
+    <path d="M425,458 L435,460 L442,468 L442,482 L435,492 L425,495 L418,488 L415,475 L418,465 Z" />
+  </g>
+  <g class="prefecture" data-code="28" data-name="Hyogo">
+    <path d="M385,420 L400,415 L415,415 L408,428 L412,455 L418,465 L415,475 L405,480 L392,478 L380,468 L375,455 L378,438 Z" />
+  </g>
+  <g class="prefecture" data-code="29" data-name="Nara">
+    <path d="M435,468 L448,472 L458,475 L455,490 L448,505 L438,508 L428,502 L425,490 L428,478 Z" />
+  </g>
+  <g class="prefecture" data-code="30" data-name="Wakayama">
+    <path d="M415,495 L425,495 L428,502 L438,508 L445,520 L440,535 L428,542 L415,538 L405,525 L405,510 Z" />
+  </g>
+
+  <!-- ===================== -->
+  <!-- CHUGOKU               -->
+  <!-- ===================== -->
+  <g class="prefecture" data-code="31" data-name="Tottori">
+    <path d="M355,425 L375,420 L385,420 L378,438 L372,448 L358,450 L348,442 L348,432 Z" />
+  </g>
+  <g class="prefecture" data-code="32" data-name="Shimane">
+    <path d="M300,425 L318,418 L338,420 L355,425 L348,432 L348,442 L340,452 L325,455 L310,450 L298,442 Z" />
+  </g>
+  <g class="prefecture" data-code="33" data-name="Okayama">
+    <path d="M358,450 L372,448 L385,455 L392,468 L388,478 L375,482 L362,478 L352,468 L352,458 Z" />
+  </g>
+  <g class="prefecture" data-code="34" data-name="Hiroshima">
+    <path d="M325,455 L340,452 L358,450 L352,458 L352,468 L348,480 L338,488 L322,488 L310,480 L308,468 Z" />
+  </g>
+  <g class="prefecture" data-code="35" data-name="Yamaguchi">
+    <path d="M275,458 L290,452 L310,450 L308,468 L310,480 L305,492 L292,498 L278,495 L268,485 L265,472 Z" />
+  </g>
+
+  <!-- ===================== -->
+  <!-- SHIKOKU               -->
+  <!-- ===================== -->
+  <g class="prefecture" data-code="36" data-name="Tokushima">
+    <path d="M395,510 L410,505 L420,510 L425,522 L418,532 L405,535 L392,530 L388,520 Z" />
+  </g>
+  <g class="prefecture" data-code="37" data-name="Kagawa">
+    <path d="M370,495 L388,492 L400,498 L398,510 L388,515 L375,512 L365,505 L365,498 Z" />
+  </g>
+  <g class="prefecture" data-code="38" data-name="Ehime">
+    <path d="M325,505 L342,498 L360,500 L365,505 L365,515 L358,528 L345,535 L330,532 L320,522 L318,512 Z" />
+  </g>
+  <g class="prefecture" data-code="39" data-name="Kochi">
+    <path d="M330,532 L345,535 L358,528 L370,525 L388,520 L395,530 L398,545 L388,558 L370,565 L350,562 L335,555 L325,545 Z" />
+  </g>
+
+  <!-- ===================== -->
+  <!-- KYUSHU                -->
+  <!-- ===================== -->
+  <g class="prefecture" data-code="40" data-name="Fukuoka">
+    <path d="M255,498 L272,492 L285,498 L288,512 L280,522 L268,525 L255,520 L248,510 Z" />
+  </g>
+  <g class="prefecture" data-code="41" data-name="Saga">
+    <path d="M232,510 L248,505 L255,510 L255,520 L248,530 L238,532 L228,525 L225,518 Z" />
+  </g>
+  <g class="prefecture" data-code="42" data-name="Nagasaki">
+    <path d="M200,518 L215,510 L228,515 L232,525 L228,538 L218,548 L205,550 L195,542 L192,530 Z" />
+  </g>
+  <g class="prefecture" data-code="43" data-name="Kumamoto">
+    <path d="M238,532 L255,525 L268,530 L272,545 L268,560 L255,568 L242,565 L232,555 L230,542 Z" />
+  </g>
+  <g class="prefecture" data-code="44" data-name="Oita">
+    <path d="M268,498 L285,498 L298,505 L302,518 L295,530 L282,535 L270,530 L265,518 L265,508 Z" />
+  </g>
+  <g class="prefecture" data-code="45" data-name="Miyazaki">
+    <path d="M268,560 L282,555 L295,560 L302,575 L298,592 L288,602 L275,605 L265,595 L260,580 L262,568 Z" />
+  </g>
+  <g class="prefecture" data-code="46" data-name="Kagoshima">
+    <path d="M232,568 L255,568 L262,580 L260,595 L252,608 L240,615 L228,612 L218,600 L215,585 L220,575 Z" />
+  </g>
+
+  <!-- ===================== -->
+  <!-- OKINAWA               -->
+  <!-- ===================== -->
+  <g class="prefecture" data-code="47" data-name="Okinawa">
+    <path d="M150,850 L158,842 L165,845 L170,858 L168,872 L162,882 L155,885 L148,878 L145,865 L146,855 Z
+    M135,895 L142,890 L148,892 L150,900 L146,908 L140,910 L135,905 Z
+    M160,825 L166,820 L172,822 L174,832 L170,838 L164,840 L158,835 Z" />
+  </g>
+</svg>
