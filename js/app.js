@@ -15,13 +15,16 @@ let selectedMBTI = null;
 // 初期化
 // ==========================================
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Firestoreからデータを読み込んでからUI初期化
+  await initData();
   initTabs();
   initPrefectureSelects();
   initMBTIGrid();
   initFormSubmit();
   initDataManagement();
   loadMap('map-container');
+  updateResultsTabState();
 });
 
 // ==========================================
@@ -32,6 +35,11 @@ function initTabs() {
   const tabs = document.querySelectorAll('.tab');
   tabs.forEach(tab => {
     tab.addEventListener('click', () => {
+      if (tab.dataset.tab === 'results' && !hasAnswered()) {
+        alert('アンケートに回答すると集計結果を見ることができます。');
+        return;
+      }
+
       tabs.forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
       tab.classList.add('active');
@@ -45,6 +53,16 @@ function initTabs() {
       }
     });
   });
+}
+
+function updateResultsTabState() {
+  const resultsTab = document.querySelector('[data-tab="results"]');
+  if (!resultsTab) return;
+  if (hasAnswered()) {
+    resultsTab.classList.remove('tab-locked');
+  } else {
+    resultsTab.classList.add('tab-locked');
+  }
 }
 
 // ==========================================
@@ -111,25 +129,42 @@ function initMBTIGrid() {
 // フォーム送信
 // ==========================================
 
+function getSelectedGender() {
+  const checked = document.querySelector('input[name="gender"]:checked');
+  return checked ? checked.value : null;
+}
+
 function updateSubmitButton() {
   const prefSelect = document.getElementById('prefecture-select');
+  const ageSelect = document.getElementById('age-select');
   const submitBtn = document.getElementById('submit-btn');
-  submitBtn.disabled = !(prefSelect.value && selectedMBTI);
+  submitBtn.disabled = !(prefSelect.value && ageSelect.value && getSelectedGender() && selectedMBTI);
 }
 
 function initFormSubmit() {
   const prefSelect = document.getElementById('prefecture-select');
+  const ageSelect = document.getElementById('age-select');
   prefSelect.addEventListener('change', updateSubmitButton);
+  ageSelect.addEventListener('change', updateSubmitButton);
+  document.querySelectorAll('input[name="gender"]').forEach(r => {
+    r.addEventListener('change', updateSubmitButton);
+  });
 
   const submitBtn = document.getElementById('submit-btn');
   submitBtn.addEventListener('click', () => {
     const prefCode = prefSelect.value;
-    if (!prefCode || !selectedMBTI) return;
+    const age = ageSelect.value;
+    const gender = getSelectedGender();
+    if (!prefCode || !age || !gender || !selectedMBTI) return;
 
-    addResponse(prefCode, selectedMBTI);
+    addResponse(prefCode, selectedMBTI, age, gender);
+    markAsAnswered();
+    updateResultsTabState();
 
     // リセット
     prefSelect.value = '';
+    ageSelect.value = '';
+    document.querySelectorAll('input[name="gender"]').forEach(r => r.checked = false);
     selectedMBTI = null;
     document.querySelectorAll('.mbti-btn').forEach(b => b.classList.remove('selected'));
     submitBtn.disabled = true;

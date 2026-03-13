@@ -75,6 +75,11 @@ body {
   border-bottom-color: #6366f1;
 }
 
+.tab.tab-locked {
+  color: #c4c8cf;
+  cursor: not-allowed;
+}
+
 /* ==========================================
    タブコンテンツ
    ========================================== */
@@ -136,6 +141,28 @@ select:focus {
   outline: none;
   border-color: #6366f1;
   box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+
+/* ==========================================
+   性別ラジオボタン
+   ========================================== */
+
+.gender-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.radio-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.radio-label input[type="radio"] {
+  accent-color: #6366f1;
 }
 
 /* ==========================================

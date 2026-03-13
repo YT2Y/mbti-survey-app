@@ -1,8 +1,10 @@
 // ==========================================
-// データ定数・localStorage CRUD
+// データ定数・Firestore + ローカルキャッシュ CRUD
 // ==========================================
 
 const STORAGE_KEY = 'mbti_survey_responses';
+const ANSWERED_KEY = 'mbti_survey_answered';
+const FIRESTORE_COLLECTION = 'responses';
 
 const PREFECTURES = [
   { code: '01', name: '北海道', region: '北海道' },
@@ -90,28 +92,58 @@ const MBTI_GROUP_COLORS = {
 
 const REGIONS = ['北海道', '東北', '関東', '中部', '近畿', '中国', '四国', '九州・沖縄'];
 
+const AGE_GROUPS = ['~19', '20-29', '30-39', '40-49', '50-59', '60~'];
+const AGE_LABELS = { '~19': '19歳以下', '20-29': '20代', '30-39': '30代', '40-49': '40代', '50-59': '50代', '60~': '60歳以上' };
+const GENDERS = ['male', 'female', 'other', 'no-answer'];
+const GENDER_LABELS = { male: '男性', female: '女性', other: 'その他', 'no-answer': '回答しない' };
+
 // ==========================================
-// localStorage CRUD
+// ローカルキャッシュ（メモリ内）
+// ==========================================
+
+let _cachedResponses = [];
+let _dataReady = false;
+
+// ==========================================
+// Firestore からデータを読み込み（初期化時に1回だけ呼ぶ）
+// ==========================================
+
+async function initData() {
+  try {
+    const snapshot = await db.collection(FIRESTORE_COLLECTION).get();
+    _cachedResponses = snapshot.docs.map(doc => doc.data());
+    _dataReady = true;
+  } catch (err) {
+    console.error('Firestore読み込みエラー、localStorageにフォールバック:', err);
+    const data = localStorage.getItem(STORAGE_KEY);
+    _cachedResponses = data ? JSON.parse(data) : [];
+    _dataReady = true;
+  }
+}
+
+// ==========================================
+// CRUD（同期的なAPIを維持、書き込みはFirestoreにも保存）
 // ==========================================
 
 function getAllResponses() {
-  const data = localStorage.getItem(STORAGE_KEY);
-  return data ? JSON.parse(data) : [];
+  return _cachedResponses;
 }
 
-function saveResponses(responses) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(responses));
-}
-
-function addResponse(prefectureCode, mbtiType) {
-  const responses = getAllResponses();
-  responses.push({
+function addResponse(prefectureCode, mbtiType, age, gender) {
+  const response = {
     id: Date.now().toString(36) + Math.random().toString(36).substr(2, 6),
     prefecture: prefectureCode,
     mbtiType: mbtiType,
+    age: age,
+    gender: gender,
     timestamp: new Date().toISOString()
+  };
+  _cachedResponses.push(response);
+
+  // Firestoreに非同期保存
+  db.collection(FIRESTORE_COLLECTION).doc(response.id).set(response).catch(err => {
+    console.error('Firestore書き込みエラー:', err);
   });
-  saveResponses(responses);
 }
 
 function getResponsesByPrefecture(prefCode) {
@@ -146,8 +178,27 @@ function getPrefectureName(code) {
   return pref ? pref.name : code;
 }
 
+function hasAnswered() {
+  return localStorage.getItem(ANSWERED_KEY) === 'true';
+}
+
+function markAsAnswered() {
+  localStorage.setItem(ANSWERED_KEY, 'true');
+}
+
 function clearAllData() {
+  _cachedResponses = [];
   localStorage.removeItem(STORAGE_KEY);
+  localStorage.removeItem(ANSWERED_KEY);
+
+  // Firestoreの全ドキュメントを削除
+  db.collection(FIRESTORE_COLLECTION).get().then(snapshot => {
+    const batch = db.batch();
+    snapshot.docs.forEach(doc => batch.delete(doc.ref));
+    return batch.commit();
+  }).catch(err => {
+    console.error('Firestore削除エラー:', err);
+  });
 }
 
 function exportData() {
@@ -160,20 +211,40 @@ function importData(jsonString) {
   data.forEach(item => {
     if (!item.prefecture || !item.mbtiType) throw new Error('データ形式が不正です');
   });
-  saveResponses(data);
+  _cachedResponses = data;
+
+  // Firestoreにバッチ書き込み
+  const batch = db.batch();
+  data.forEach(item => {
+    if (!item.id) {
+      item.id = Date.now().toString(36) + Math.random().toString(36).substr(2, 6);
+    }
+    batch.set(db.collection(FIRESTORE_COLLECTION).doc(item.id), item);
+  });
+  batch.commit().catch(err => {
+    console.error('Firestoreインポートエラー:', err);
+  });
 }
 
 function generateSampleData(count) {
-  const responses = getAllResponses();
+  const batch = db.batch();
   for (let i = 0; i < count; i++) {
     const pref = PREFECTURES[Math.floor(Math.random() * PREFECTURES.length)];
     const mbti = MBTI_TYPES[Math.floor(Math.random() * MBTI_TYPES.length)];
-    responses.push({
-      id: Date.now().toString(36) + Math.random().toString(36).substr(2, 6),
+    const age = AGE_GROUPS[Math.floor(Math.random() * AGE_GROUPS.length)];
+    const gender = GENDERS[Math.floor(Math.random() * GENDERS.length)];
+    const response = {
+      id: Date.now().toString(36) + Math.random().toString(36).substr(2, 6) + i,
       prefecture: pref.code,
       mbtiType: mbti,
+      age: age,
+      gender: gender,
       timestamp: new Date().toISOString()
-    });
+    };
+    _cachedResponses.push(response);
+    batch.set(db.collection(FIRESTORE_COLLECTION).doc(response.id), response);
   }
-  saveResponses(responses);
+  batch.commit().catch(err => {
+    console.error('Firestoreサンプルデータエラー:', err);
+  });
 }
