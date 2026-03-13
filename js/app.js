@@ -196,39 +196,6 @@ function getMBTIGroup(type) {
 }
 
 let selectedMBTI = null;
-let adminAuthenticated = false;
-
-// 管理者パスワード認証
-async function sha256(message) {
-  const msgBuffer = new TextEncoder().encode(message);
-  const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-}
-
-let ADMIN_PASSWORD_HASH = '';
-(async () => {
-  ADMIN_PASSWORD_HASH = await sha256('mbti2024');
-})();
-
-async function checkAdminPassword() {
-  if (adminAuthenticated) return true;
-  const password = prompt('管理者パスワードを入力してください:');
-  if (!password) return false;
-  const hash = await sha256(password);
-  if (hash === ADMIN_PASSWORD_HASH) {
-    adminAuthenticated = true;
-    return true;
-  }
-  alert('パスワードが正しくありません。');
-  return false;
-}
-
-// URLパラメータで管理モードチェック
-function isAdminMode() {
-  const params = new URLSearchParams(window.location.search);
-  return params.get('admin') === 'mbti2024';
-}
 
 // ==========================================
 // 初期化
@@ -236,25 +203,13 @@ function isAdminMode() {
 
 document.addEventListener('DOMContentLoaded', async () => {
   await initData();
-  if (isAdminMode()) initAdminTab();
   initTabs();
   initPrefectureSelects();
   initMBTIGrid();
   initFormSubmit();
-  if (isAdminMode()) initDataManagement();
   loadMap('map-container');
   updateResultsTabState();
 });
-
-// 管理タブを動的に追加
-function initAdminTab() {
-  const nav = document.querySelector('.tabs');
-  const btn = document.createElement('button');
-  btn.className = 'tab';
-  btn.dataset.tab = 'manage';
-  btn.textContent = '管理';
-  nav.appendChild(btn);
-}
 
 // ==========================================
 // タブ切替
@@ -269,11 +224,6 @@ function initTabs() {
         return;
       }
 
-      if (tab.dataset.tab === 'manage') {
-        const ok = await checkAdminPassword();
-        if (!ok) return;
-      }
-
       tabs.forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
       tab.classList.add('active');
@@ -282,8 +232,6 @@ function initTabs() {
 
       if (tab.dataset.tab === 'results') {
         refreshResults();
-      } else if (tab.dataset.tab === 'manage') {
-        updateDataCount();
       }
     });
   });
@@ -516,60 +464,3 @@ document.addEventListener('DOMContentLoaded', () => {
   if (cb) cb.addEventListener('change', renderResultsTable);
 });
 
-// ==========================================
-// データ管理
-// ==========================================
-
-function updateDataCount() {
-  const el = document.getElementById('data-count');
-  if (!el) return;
-  const count = getAllResponses().length;
-  el.textContent = `総回答数: ${count}件`;
-}
-
-function initDataManagement() {
-  const btnSample = document.getElementById('btn-sample');
-  if (!btnSample) return;
-
-  btnSample.addEventListener('click', () => {
-    generateSampleData(50);
-    updateDataCount();
-    alert('サンプルデータ50件を追加しました');
-  });
-
-  document.getElementById('btn-export').addEventListener('click', () => {
-    const data = exportData();
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'mbti_survey_data.json';
-    a.click();
-    URL.revokeObjectURL(url);
-  });
-
-  document.getElementById('file-import').addEventListener('change', (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = (ev) => {
-      try {
-        importData(ev.target.result);
-        updateDataCount();
-        alert('データをインポートしました');
-      } catch (err) {
-        alert('インポートエラー: ' + err.message);
-      }
-    };
-    reader.readAsText(file);
-    e.target.value = '';
-  });
-
-  document.getElementById('btn-clear').addEventListener('click', () => {
-    if (confirm('全てのデータを削除しますか？この操作は取り消せません。')) {
-      clearAllData();
-      updateDataCount();
-      alert('データを削除しました');
-    }
-  });
-}
