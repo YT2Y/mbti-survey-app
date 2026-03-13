@@ -320,8 +320,8 @@ select option {
 }
 
 .mbti-avatar-svg {
-  width: 44px;
-  height: 44px;
+  width: 52px;
+  height: 52px;
   filter: drop-shadow(0 0 6px var(--mbti-glow, rgba(168, 85, 247, 0.4)));
   transition: transform 0.2s, filter 0.2s;
 }
@@ -693,8 +693,8 @@ tbody td.highlight {
   }
 
   .mbti-avatar-svg {
-    width: 36px;
-    height: 36px;
+    width: 42px;
+    height: 42px;
   }
 
   .mbti-type-name {
