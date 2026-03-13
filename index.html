@@ -11,23 +11,23 @@
 </head>
 <body>
   <header class="header">
-    <h1>MBTI都道府県アンケート</h1>
-    <p class="header-sub">あなたの都道府県とMBTIタイプを教えてください</p>
+    <h1>MBTI × 都道府県マップ</h1>
+    <p class="header-sub">あなたのMBTIと住んでる場所をおしえてね</p>
   </header>
 
   <nav class="tabs">
     <button class="tab active" data-tab="survey">回答する</button>
-    <button class="tab" data-tab="results">結果を見る</button>
-    <button class="tab" data-tab="manage">データ管理</button>
+    <button class="tab" data-tab="results">結果をみる</button>
+    <button class="tab" data-tab="manage">管理</button>
   </nav>
 
   <!-- ========== 回答タブ ========== -->
   <section id="tab-survey" class="tab-content active">
     <div class="card">
-      <h2>アンケート回答</h2>
+      <h2>あなたについて教えて</h2>
 
       <div class="form-group">
-        <label for="prefecture-select">お住まいの都道府県</label>
+        <label for="prefecture-select">住んでるところ</label>
         <select id="prefecture-select">
           <option value="">-- 選択してください --</option>
         </select>
@@ -61,7 +61,7 @@
         <div class="mbti-grid" id="mbti-grid"></div>
       </div>
 
-      <button id="submit-btn" class="btn-primary" disabled>回答を送信</button>
+      <button id="submit-btn" class="btn-primary" disabled>送信する</button>
       <div id="submit-message" class="message hidden"></div>
     </div>
   </section>
@@ -69,14 +69,14 @@
   <!-- ========== 結果タブ ========== -->
   <section id="tab-results" class="tab-content hidden">
     <div class="card">
-      <h2>都道府県マップ</h2>
+      <h2>みんなのMBTIマップ</h2>
       <div class="map-legend" id="map-legend"></div>
       <div class="map-container" id="map-container"></div>
       <div class="tooltip" id="map-tooltip"></div>
     </div>
 
     <div class="card">
-      <h2>全体のMBTI分布</h2>
+      <h2>みんなのMBTI分布</h2>
       <div class="chart-wrapper">
         <canvas id="chart-overall"></canvas>
       </div>
