@@ -395,6 +395,11 @@ function updateSubmitButton() {
   const prefSelect = document.getElementById('prefecture-select');
   const ageSelect = document.getElementById('age-select');
   const submitBtn = document.getElementById('submit-btn');
+  if (hasAnswered()) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = '回答済みです';
+    return;
+  }
   submitBtn.disabled = !(prefSelect.value && ageSelect.value && getSelectedGender() && selectedMBTI);
 }
 

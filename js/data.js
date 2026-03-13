@@ -178,18 +178,72 @@ function getPrefectureName(code) {
   return pref ? pref.name : code;
 }
 
+// ブラウザフィンガープリント生成（画面・言語・UA等の組み合わせハッシュ）
+function generateFingerprint() {
+  const components = [
+    screen.width, screen.height, screen.colorDepth,
+    navigator.language, navigator.languages?.join(','),
+    navigator.hardwareConcurrency,
+    new Date().getTimezoneOffset(),
+    navigator.platform,
+    !!window.indexedDB, !!window.sessionStorage, !!window.localStorage,
+    navigator.maxTouchPoints
+  ];
+  const str = components.join('|');
+  // 簡易ハッシュ（djb2）
+  let hash = 5381;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) + hash) + str.charCodeAt(i);
+    hash = hash & hash; // 32bit整数に
+  }
+  return 'fp_' + Math.abs(hash).toString(36);
+}
+
+// Cookie操作
+function setCookie(name, value, days) {
+  const d = new Date();
+  d.setTime(d.getTime() + days * 86400000);
+  document.cookie = `${name}=${value};expires=${d.toUTCString()};path=/;SameSite=Lax`;
+}
+
+function getCookie(name) {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
+
+const ANSWERED_COOKIE = 'mbti_answered';
+const FP_STORAGE_KEY = 'mbti_survey_fps';
+
 function hasAnswered() {
-  return localStorage.getItem(ANSWERED_KEY) === 'true';
+  // 1. localStorage チェック
+  if (localStorage.getItem(ANSWERED_KEY) === 'true') return true;
+  // 2. Cookie チェック
+  if (getCookie(ANSWERED_COOKIE) === 'true') return true;
+  // 3. フィンガープリント チェック
+  const fp = generateFingerprint();
+  const stored = JSON.parse(localStorage.getItem(FP_STORAGE_KEY) || '[]');
+  if (stored.includes(fp)) return true;
+  return false;
 }
 
 function markAsAnswered() {
+  // 3重で記録
   localStorage.setItem(ANSWERED_KEY, 'true');
+  setCookie(ANSWERED_COOKIE, 'true', 365);
+  const fp = generateFingerprint();
+  const stored = JSON.parse(localStorage.getItem(FP_STORAGE_KEY) || '[]');
+  if (!stored.includes(fp)) {
+    stored.push(fp);
+    localStorage.setItem(FP_STORAGE_KEY, JSON.stringify(stored));
+  }
 }
 
 function clearAllData() {
   _cachedResponses = [];
   localStorage.removeItem(STORAGE_KEY);
   localStorage.removeItem(ANSWERED_KEY);
+  localStorage.removeItem(FP_STORAGE_KEY);
+  setCookie(ANSWERED_COOKIE, '', -1);
 
   // Firestoreの全ドキュメントを削除
   db.collection(FIRESTORE_COLLECTION).get().then(snapshot => {
