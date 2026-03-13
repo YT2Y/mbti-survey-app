@@ -15,7 +15,9 @@ let selectedMBTI = null;
 // 初期化
 // ==========================================
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
+  // Firestoreからデータを読み込んでからUI初期化
+  await initData();
   initTabs();
   initPrefectureSelects();
   initMBTIGrid();
