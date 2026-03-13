@@ -17,21 +17,98 @@ const MBTI_GROUP_NEON = {
   SP: '#fbbf24'  // イエローネオン
 };
 
-// タイプ別のアイコン絵文字
-const MBTI_EMOJI = {
-  INTJ: '🏛️', INTP: '🔬', ENTJ: '👑', ENTP: '💡',
-  INFJ: '🔮', INFP: '🦋', ENFJ: '🌟', ENFP: '🎪',
-  ISTJ: '📋', ISFJ: '🛡️', ESTJ: '⚖️', ESFJ: '🤝',
-  ISTP: '🔧', ISFP: '🎨', ESTP: '🚀', ESFP: '🎭'
-};
-
-// タイプ別の個別カラー
+// タイプ別の個別カラー（グループ内でバリエーション）
 const MBTI_TYPE_COLORS = {
   INTJ: '#a78bfa', INTP: '#c4b5fd', ENTJ: '#8b5cf6', ENTP: '#d8b4fe',
   INFJ: '#6ee7b7', INFP: '#86efac', ENFJ: '#34d399', ENFP: '#a7f3d0',
   ISTJ: '#93c5fd', ISFJ: '#7dd3fc', ESTJ: '#60a5fa', ESFJ: '#a5b4fc',
   ISTP: '#fcd34d', ISFP: '#fdba74', ESTP: '#fbbf24', ESFP: '#fb923c'
 };
+
+// タイプ別のSVGシンボルパス
+const MBTI_SYMBOLS = {
+  // NT 分析家 - 幾何学的・知的なシンボル
+  INTJ: `<polygon points="24,6 42,38 6,38" fill="none" stroke="CL" stroke-width="2.5"/>
+         <polygon points="24,14 36,34 12,34" fill="CL" opacity="0.3"/>
+         <circle cx="24" cy="26" r="3" fill="CL"/>`,
+  INTP: `<circle cx="24" cy="24" r="14" fill="none" stroke="CL" stroke-width="2"/>
+         <ellipse cx="24" cy="24" rx="6" ry="14" fill="none" stroke="CL" stroke-width="1.5" opacity="0.6"/>
+         <ellipse cx="24" cy="24" rx="14" ry="6" fill="none" stroke="CL" stroke-width="1.5" opacity="0.6"/>
+         <circle cx="24" cy="24" r="3" fill="CL"/>`,
+  ENTJ: `<path d="M24,6 L24,42" stroke="CL" stroke-width="3"/>
+         <path d="M18,12 L30,12" stroke="CL" stroke-width="2.5"/>
+         <path d="M14,6 L34,6" stroke="CL" stroke-width="3"/>
+         <path d="M16,42 L32,42" stroke="CL" stroke-width="2.5"/>
+         <diamond><rect x="19" y="20" width="10" height="10" fill="CL" opacity="0.3" transform="rotate(45 24 25)"/></diamond>`,
+  ENTP: `<circle cx="24" cy="18" r="8" fill="none" stroke="CL" stroke-width="2"/>
+         <path d="M20,26 Q24,40 28,26" fill="none" stroke="CL" stroke-width="2"/>
+         <line x1="24" y1="10" x2="24" y2="16" stroke="CL" stroke-width="2.5"/>
+         <circle cx="24" cy="18" r="2" fill="CL"/>`,
+
+  // NF 外交官 - 有機的・やわらかいシンボル
+  INFJ: `<path d="M24,8 Q36,20 24,40 Q12,20 24,8Z" fill="CL" opacity="0.2" stroke="CL" stroke-width="2"/>
+         <circle cx="24" cy="22" r="5" fill="none" stroke="CL" stroke-width="1.5"/>
+         <circle cx="24" cy="22" r="2" fill="CL"/>`,
+  INFP: `<path d="M24,10 L27,18 L36,18 L29,24 L32,33 L24,28 L16,33 L19,24 L12,18 L21,18Z" fill="CL" opacity="0.25" stroke="CL" stroke-width="1.8"/>
+         <circle cx="24" cy="22" r="4" fill="CL" opacity="0.5"/>`,
+  ENFJ: `<circle cx="24" cy="24" r="14" fill="CL" opacity="0.15"/>
+         <path d="M24,10 L24,38 M10,24 L38,24 M14,14 L34,34 M34,14 L14,34" stroke="CL" stroke-width="1.5" opacity="0.6"/>
+         <circle cx="24" cy="24" r="6" fill="none" stroke="CL" stroke-width="2"/>
+         <circle cx="24" cy="24" r="2.5" fill="CL"/>`,
+  ENFP: `<path d="M24,8 C32,8 38,16 34,24 C38,32 32,40 24,36 C16,40 10,32 14,24 C10,16 16,8 24,8Z" fill="CL" opacity="0.2" stroke="CL" stroke-width="2"/>
+         <circle cx="24" cy="24" r="4" fill="CL" opacity="0.5"/>`,
+
+  // SJ 番人 - 安定的・構造的なシンボル
+  ISTJ: `<rect x="10" y="10" width="28" height="28" rx="2" fill="none" stroke="CL" stroke-width="2"/>
+         <line x1="10" y1="18" x2="38" y2="18" stroke="CL" stroke-width="1.5"/>
+         <line x1="10" y1="26" x2="38" y2="26" stroke="CL" stroke-width="1.5"/>
+         <line x1="10" y1="34" x2="38" y2="34" stroke="CL" stroke-width="1.5"/>
+         <rect x="10" y="10" width="28" height="8" fill="CL" opacity="0.2"/>`,
+  ISFJ: `<path d="M24,8 L24,14 M24,34 L24,40 M8,24 L14,24 M34,24 L40,24" stroke="CL" stroke-width="2"/>
+         <circle cx="24" cy="24" r="12" fill="none" stroke="CL" stroke-width="2.5"/>
+         <circle cx="24" cy="24" r="6" fill="CL" opacity="0.25"/>
+         <circle cx="24" cy="24" r="2" fill="CL"/>`,
+  ESTJ: `<rect x="12" y="14" width="24" height="24" fill="none" stroke="CL" stroke-width="2"/>
+         <polygon points="24,6 36,14 12,14" fill="CL" opacity="0.3" stroke="CL" stroke-width="1.5"/>
+         <line x1="24" y1="14" x2="24" y2="38" stroke="CL" stroke-width="1.5"/>
+         <line x1="12" y1="26" x2="36" y2="26" stroke="CL" stroke-width="1.5"/>`,
+  ESFJ: `<circle cx="24" cy="16" r="6" fill="CL" opacity="0.3" stroke="CL" stroke-width="1.5"/>
+         <circle cx="16" cy="30" r="6" fill="CL" opacity="0.3" stroke="CL" stroke-width="1.5"/>
+         <circle cx="32" cy="30" r="6" fill="CL" opacity="0.3" stroke="CL" stroke-width="1.5"/>
+         <line x1="24" y1="22" x2="16" y2="24" stroke="CL" stroke-width="1.5"/>
+         <line x1="24" y1="22" x2="32" y2="24" stroke="CL" stroke-width="1.5"/>
+         <line x1="16" y1="36" x2="32" y2="36" stroke="CL" stroke-width="1.5" opacity="0.5"/>`,
+
+  // SP 探検家 - ダイナミック・アクティブなシンボル
+  ISTP: `<circle cx="24" cy="24" r="14" fill="none" stroke="CL" stroke-width="2"/>
+         <circle cx="24" cy="24" r="3" fill="CL"/>
+         <path d="M24,10 L26,20 L24,24" stroke="CL" stroke-width="2" fill="none"/>
+         <path d="M24,24 L32,28" stroke="CL" stroke-width="1.5"/>`,
+  ISFP: `<path d="M12,36 Q16,20 24,12 Q32,20 36,36" fill="none" stroke="CL" stroke-width="2"/>
+         <path d="M18,36 Q20,26 24,18 Q28,26 30,36" fill="CL" opacity="0.2"/>
+         <circle cx="24" cy="16" r="3" fill="CL" opacity="0.6"/>`,
+  ESTP: `<polygon points="24,6 44,36 4,36" fill="none" stroke="CL" stroke-width="2.5"/>
+         <polygon points="24,16 34,34 14,34" fill="CL" opacity="0.15"/>
+         <line x1="24" y1="6" x2="24" y2="34" stroke="CL" stroke-width="1.5" opacity="0.5"/>
+         <circle cx="24" cy="28" r="3" fill="CL" opacity="0.5"/>`,
+  ESFP: `<path d="M24,8 L28,20 L40,20 L30,28 L34,40 L24,32 L14,40 L18,28 L8,20 L20,20Z" fill="CL" opacity="0.2" stroke="CL" stroke-width="2"/>
+         <path d="M24,14 L26,22 L34,22 L28,27 L30,35 L24,30 L18,35 L20,27 L14,22 L22,22Z" fill="CL" opacity="0.3"/>`
+};
+
+// インラインSVGアバターを生成
+function createMBTIAvatar(type) {
+  const color = MBTI_TYPE_COLORS[type];
+  const symbol = MBTI_SYMBOLS[type].replace(/CL/g, color);
+  return `<svg class="mbti-avatar-svg" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+    <defs><radialGradient id="bg-${type}" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="${color}" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="${color}" stop-opacity="0.05"/>
+    </radialGradient></defs>
+    <circle cx="24" cy="24" r="23" fill="url(#bg-${type})" stroke="${color}" stroke-width="1" opacity="0.6"/>
+    ${symbol}
+  </svg>`
+;
+}
 
 function getMBTIGroup(type) {
   if (['INTJ','INTP','ENTJ','ENTP'].includes(type)) return 'NT';
@@ -211,7 +288,7 @@ function initMBTIGrid() {
       btn.style.setProperty('--mbti-glow', typeColor);
 
       btn.innerHTML =
-        `<span class="mbti-emoji">${MBTI_EMOJI[type]}</span>` +
+        createMBTIAvatar(type) +
         `<span class="mbti-type-name">${type}</span>` +
         `<span class="mbti-label">${MBTI_LABELS[type]}</span>`;
 
@@ -273,9 +350,15 @@ function initFormSubmit() {
 
     // 成功メッセージ
     const msg = document.getElementById('submit-message');
-    msg.textContent = '回答ありがとう！結果タブで みんなのデータをチェックしてね';
+    msg.textContent = '回答ありがとう！結果を表示します…';
     msg.className = 'message success';
-    setTimeout(() => { msg.className = 'message hidden'; }, 3000);
+
+    // 1.5秒後に結果タブへ自動切り替え
+    setTimeout(() => {
+      msg.className = 'message hidden';
+      const resultsTab = document.querySelector('[data-tab="results"]');
+      if (resultsTab) resultsTab.click();
+    }, 1500);
   });
 }
 

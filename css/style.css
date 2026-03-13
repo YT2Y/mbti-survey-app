@@ -319,10 +319,20 @@ select option {
   box-shadow: 0 0 20px var(--mbti-glow, rgba(168, 85, 247, 0.3)), 0 4px 16px rgba(0, 0, 0, 0.3);
 }
 
-.mbti-emoji {
-  font-size: 1.5rem;
-  line-height: 1;
+.mbti-avatar-svg {
+  width: 44px;
+  height: 44px;
   filter: drop-shadow(0 0 6px var(--mbti-glow, rgba(168, 85, 247, 0.4)));
+  transition: transform 0.2s, filter 0.2s;
+}
+
+.mbti-btn:hover .mbti-avatar-svg {
+  transform: scale(1.1);
+  filter: drop-shadow(0 0 10px var(--mbti-glow, rgba(168, 85, 247, 0.6)));
+}
+
+.mbti-btn.selected .mbti-avatar-svg {
+  filter: drop-shadow(0 0 14px var(--mbti-glow, rgba(168, 85, 247, 0.8)));
 }
 
 .mbti-type-name {
@@ -682,8 +692,9 @@ tbody td.highlight {
     padding: 1.25rem;
   }
 
-  .mbti-emoji {
-    font-size: 1.2rem;
+  .mbti-avatar-svg {
+    width: 36px;
+    height: 36px;
   }
 
   .mbti-type-name {
