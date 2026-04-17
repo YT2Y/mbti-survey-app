@@ -203,47 +203,27 @@ let selectedMBTI = null;
 
 document.addEventListener('DOMContentLoaded', async () => {
   await initData();
-  initTabs();
   initPrefectureSelects();
   initMBTIGrid();
   initFormSubmit();
   loadMap('map-container');
-  updateResultsTabState();
+  updatePageState();
 });
 
 // ==========================================
-// タブ切替
+// ページ状態管理（回答済みなら結果を表示）
 // ==========================================
 
-function initTabs() {
-  const tabs = document.querySelectorAll('.tab');
-  tabs.forEach(tab => {
-    tab.addEventListener('click', async () => {
-      if (tab.dataset.tab === 'results' && !hasAnswered()) {
-        alert('アンケートに回答すると集計結果を見ることができます。');
-        return;
-      }
-
-      tabs.forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(c => c.classList.add('hidden'));
-      tab.classList.add('active');
-      const target = document.getElementById('tab-' + tab.dataset.tab);
-      target.classList.remove('hidden');
-
-      if (tab.dataset.tab === 'results') {
-        refreshResults();
-      }
-    });
-  });
-}
-
-function updateResultsTabState() {
-  const resultsTab = document.querySelector('[data-tab="results"]');
-  if (!resultsTab) return;
+function updatePageState() {
+  const surveySection = document.getElementById('section-survey');
+  const resultsSection = document.getElementById('section-results');
   if (hasAnswered()) {
-    resultsTab.classList.remove('tab-locked');
+    surveySection.classList.add('hidden');
+    resultsSection.classList.remove('hidden');
+    refreshResults();
   } else {
-    resultsTab.classList.add('tab-locked');
+    surveySection.classList.remove('hidden');
+    resultsSection.classList.add('hidden');
   }
 }
 
@@ -355,11 +335,6 @@ function updateSubmitButton() {
   const prefSelect = document.getElementById('prefecture-select');
   const ageSelect = document.getElementById('age-select');
   const submitBtn = document.getElementById('submit-btn');
-  if (hasAnswered()) {
-    submitBtn.disabled = true;
-    submitBtn.textContent = '回答済みです';
-    return;
-  }
   submitBtn.disabled = !(prefSelect.value && ageSelect.value && getSelectedGender() && selectedMBTI);
 }
 
@@ -381,26 +356,15 @@ function initFormSubmit() {
 
     addResponse(prefCode, selectedMBTI, age, gender);
     markAsAnswered();
-    updateResultsTabState();
 
-    // リセット
-    prefSelect.value = '';
-    ageSelect.value = '';
-    document.querySelectorAll('input[name="gender"]').forEach(r => r.checked = false);
-    selectedMBTI = null;
-    document.querySelectorAll('.mbti-btn').forEach(b => b.classList.remove('selected'));
-    submitBtn.disabled = true;
-
-    // 成功メッセージ
     const msg = document.getElementById('submit-message');
     msg.textContent = '回答ありがとう！結果を表示します…';
     msg.className = 'message success';
 
-    // 1.5秒後に結果タブへ自動切り替え
     setTimeout(() => {
       msg.className = 'message hidden';
-      const resultsTab = document.querySelector('[data-tab="results"]');
-      if (resultsTab) resultsTab.click();
+      updatePageState();
+      document.getElementById('section-results').scrollIntoView({ behavior: 'smooth' });
     }, 1500);
   });
 }
